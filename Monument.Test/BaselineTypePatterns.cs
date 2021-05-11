@@ -150,12 +150,16 @@ namespace Monument.Test
         }
 
         [TestMethod]
-        public void ClosedGenericListRegistration()
-        {
+        public void ClosedGenericListRegistration() =>
             Assert.AreEqual(2, Get<IEnumerable<IGenericInterface<SimpleImplementation1>>>(
                 typeof(ClosedGenericImplementation1),
                 typeof(ClosedGenericImplementation2)).Count());
-        }
+
+        [TestMethod]
+        public void ClosedGenericAdapterRegistration() =>
+            Assert.AreEqual(typeof(ClosedGenericAdapter), GetType<IGenericInterface<SimpleImplementation1>>(
+                typeof(ClosedGenericAdapter),
+                typeof(ClosedGenericImplementation4)));
     }
 
     public class SimpleImplementation1 : ISimpleInterface { }
@@ -202,4 +206,11 @@ namespace Monument.Test
     }
     public interface ISimpleInterface { }
     public interface IGenericInterface<T> { }
+
+    public class ClosedGenericAdapter : IGenericInterface<SimpleImplementation1>
+    {
+        public ClosedGenericAdapter(IGenericInterface<SimpleImplementation2> inner) { Inner = inner; }
+
+        public IGenericInterface<SimpleImplementation2> Inner { get; }
+    }
 }

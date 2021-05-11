@@ -9,7 +9,7 @@ namespace Monument
         public static Type ToTypeKey(this Type type) => type.IsGenericType ? type.GetGenericTypeDefinition() : type;
 
         public static bool ImplementsInterface(this Type type, Type parentType) => parentType.IsInterface
-            && (parentType.IsAssignableFrom(type) 
+            && (parentType.IsAssignableFrom(type)
             || (parentType.IsGenericType
             && type.GetInterfaces().Select(ToTypeKey).Contains(parentType.ToTypeKey())));
 
@@ -25,7 +25,7 @@ namespace Monument
 
         public static bool IsDecorator(this Type type) => type.HasInterfaces()
             && type.GetConstructors().Single().GetParameters()
-                .Any(p => p.ParameterType.ToTypeKey() == type.GetInterfaces().Single().ToTypeKey());
+                .Any(p => p.ParameterType == type.GetInterfaces().Single());
 
         public static Lifestyle GetLifestyle(this Type type) => Lifestyle.Transient;
     }
